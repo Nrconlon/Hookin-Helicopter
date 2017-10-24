@@ -7,28 +7,31 @@ using UnityEngine;
 [RequireComponent(typeof(BoxCollider2D))]
 [RequireComponent(typeof(Rigidbody2D))]
 public abstract class FlyingObject : MonoBehaviour {
-	bool isHooked = false;
+	protected bool isHooked = false;
 	Rigidbody2D myRigidBody;
 
-
-	void Start () {
+	public virtual void Initialize()
+	{
 		myRigidBody = GetComponent<Rigidbody2D>();
-		myRigidBody.Sleep();
-	}
-	
-	void Update () {
-		
+		UnHooked();
 	}
 
 	public virtual void GotHooked()
 	{
 		isHooked = true;
 		myRigidBody.WakeUp();
+		myRigidBody.simulated = true;
 	}
 
 	public virtual void UnHooked()
 	{
 		isHooked = false;
 		myRigidBody.Sleep();
+		myRigidBody.simulated = false;
+	}
+
+	public Vector3 V2toV3(Vector2 v2)
+	{
+		return new Vector3(v2.x, v2.y, 0);
 	}
 }
