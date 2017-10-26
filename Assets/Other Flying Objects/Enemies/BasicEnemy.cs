@@ -12,10 +12,22 @@ public class BasicEnemy : Enemy {
 
 	private void FixedUpdate()
 	{
-		if(targetDirection != Vector2.zero)
+		if(targetDirection != Vector2.zero && !isHooked && isActivated)
 		{
 			transform.position = transform.position + V2toV3(targetDirection * movementSpeed * 0.02f);
 		}
+	}
+
+	public override void GotHooked(Rigidbody2D hook)
+	{
+		DeActivate();
+		base.GotHooked(hook);
+	}
+
+	public override void UnHooked()
+	{
+		myRigidBody.gravityScale = 1;
+		base.UnHooked();
 	}
 
 	// Update is called once per frame

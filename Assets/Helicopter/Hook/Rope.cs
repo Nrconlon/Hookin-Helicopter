@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class Rope : MonoBehaviour {
 
-	public Rigidbody2D hook;
+	public Rigidbody2D helicoper;
 
 	public GameObject linkPrefab;
 
-	public Weight weigth;
+	public Hook hook;
 
 	public int links = 7;
 
@@ -16,7 +16,7 @@ public class Rope : MonoBehaviour {
 
 	void GenerateRope ()
 	{
-		Rigidbody2D previousRB = hook;
+		Rigidbody2D previousRB = helicoper;
 		for (int i = 0; i < links; i++)
 		{
 			GameObject link = Instantiate(linkPrefab, transform);
@@ -32,7 +32,7 @@ public class Rope : MonoBehaviour {
 				previousRB = link.GetComponent<Rigidbody2D>();
 			} else
 			{
-				weigth.ConnectRopeEnd(link.GetComponent<Rigidbody2D>());
+				hook.ConnectRopeEnd(link.GetComponent<Rigidbody2D>());
 			}
 
 			
