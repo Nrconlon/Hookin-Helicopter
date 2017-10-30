@@ -56,5 +56,11 @@ public abstract class FlyingObject : MonoBehaviour {
 	{
 		isActivated = false;
 		mySpriteRenderer.sprite = unActiveSprite;
+		myRigidBody.gravityScale = 1;
 	}
+	public bool IsActivated
+	{
+		get { return isActivated; }
+	}
+
 }

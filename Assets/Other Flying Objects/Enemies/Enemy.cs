@@ -18,4 +18,16 @@ public class Enemy : FlyingObject {
 	// Update is called once per frame
 	void Update () {
 	}
+
+
+	public override void GotHooked(Rigidbody2D hook)
+	{
+		DeActivate();
+		base.GotHooked(hook);
+	}
+
+	public override void UnHooked()
+	{
+		base.UnHooked();
+	}
 }

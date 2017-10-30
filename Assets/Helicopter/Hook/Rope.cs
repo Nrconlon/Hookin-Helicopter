@@ -8,6 +8,8 @@ public class Rope : MonoBehaviour {
 
 	public Hook hook;
 
+	[SerializeField] float helicopterMass = 200f;
+
 	public int links = 7;
 
 	void Start () {
@@ -22,9 +24,11 @@ public class Rope : MonoBehaviour {
 			GameObject link = Instantiate(linkPrefab, transform);
 			HingeJoint2D joint = link.GetComponent<HingeJoint2D>();
 			joint.connectedBody = previousRB;
-			if(i==0)
+
+			if (i==0)
 			{
 				joint.connectedAnchor = Vector2.zero;
+				link.GetComponent<Rigidbody2D>().mass = helicopterMass;
 			}
 
 			if (i < links - 1)
@@ -34,6 +38,8 @@ public class Rope : MonoBehaviour {
 			{
 				hook.ConnectRopeEnd(link.GetComponent<Rigidbody2D>());
 			}
+
+		
 
 			
 		}

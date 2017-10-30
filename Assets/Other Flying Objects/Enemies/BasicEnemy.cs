@@ -18,17 +18,6 @@ public class BasicEnemy : Enemy {
 		}
 	}
 
-	public override void GotHooked(Rigidbody2D hook)
-	{
-		DeActivate();
-		base.GotHooked(hook);
-	}
-
-	public override void UnHooked()
-	{
-		myRigidBody.gravityScale = 1;
-		base.UnHooked();
-	}
 
 	// Update is called once per frame
 	void Update () {  

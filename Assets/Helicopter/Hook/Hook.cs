@@ -23,21 +23,33 @@ public class Hook : MonoBehaviour
 			PlayerHelicopter helicopter = collision.gameObject.GetComponent<PlayerHelicopter>();
 			if (helicopter)
 			{
-				reHookDelayTimer = Time.time + reHookDelay;
-				hookedObject.UnHooked();
-				hookedObject = null;
+				DetatchHookedObject();
 			}
+			FlyingObject flyingObject = collision.gameObject.GetComponent<FlyingObject>();
+			if (flyingObject && flyingObject != hookedObject)
+			{
+				DetatchHookedObject();
+				flyingObject.DeActivate();
+				//TODO apply force to objects
+			}
+
 		}
 		else
 		{
 			FlyingObject flyingObject = collision.gameObject.GetComponent<FlyingObject>();
-			if (flyingObject && !flyingObject.IsHooked &&  reHookDelayTimer < Time.time)
+			if (flyingObject && !flyingObject.IsHooked && reHookDelayTimer < Time.time && flyingObject.IsActivated)
 			{
 				hookedObject = flyingObject;
 				flyingObject.GotHooked(GetComponent<Rigidbody2D>());
 			}
 		}
+	}
 
+	private void DetatchHookedObject()
+	{
+		reHookDelayTimer = Time.time + reHookDelay;
+		hookedObject.UnHooked();
+		hookedObject = null;
 	}
 
 }
