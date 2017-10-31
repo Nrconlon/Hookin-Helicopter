@@ -4,7 +4,7 @@ public class Hook : MonoBehaviour
 {
 
 	public float distanceFromChainEnd = 0.6f;
-	FlyingObject hookedObject;
+	HookableObject hookedObject;
 	[SerializeField] float reHookDelay = 0.5f;
 	float reHookDelayTimer = 0f;
 
@@ -25,9 +25,10 @@ public class Hook : MonoBehaviour
 			{
 				DetatchHookedObject();
 			}
-			FlyingObject flyingObject = collision.gameObject.GetComponent<FlyingObject>();
+			HookableObject flyingObject = collision.gameObject.GetComponent<HookableObject>();
 			if (flyingObject && flyingObject != hookedObject)
 			{
+				//if force > needed force
 				DetatchHookedObject();
 				flyingObject.DeActivate();
 				//TODO apply force to objects
@@ -36,7 +37,7 @@ public class Hook : MonoBehaviour
 		}
 		else
 		{
-			FlyingObject flyingObject = collision.gameObject.GetComponent<FlyingObject>();
+			HookableObject flyingObject = collision.gameObject.GetComponent<HookableObject>();
 			if (flyingObject && !flyingObject.IsHooked && reHookDelayTimer < Time.time && flyingObject.IsActivated)
 			{
 				hookedObject = flyingObject;

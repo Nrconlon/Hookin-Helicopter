@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : FlyingObject {
+public class Enemy : HookableObject {
 	protected PlayerHelicopter playerHelicopter;
 
 	public override void Initialize()

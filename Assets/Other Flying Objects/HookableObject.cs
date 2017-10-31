@@ -6,7 +6,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
 [RequireComponent(typeof(Rigidbody2D))]
-public abstract class FlyingObject : MonoBehaviour {
+public abstract class HookableObject : MonoBehaviour {
 	protected bool isHooked = false;
 	protected Rigidbody2D myRigidBody;
 	HingeJoint2D myHingeJoint;
