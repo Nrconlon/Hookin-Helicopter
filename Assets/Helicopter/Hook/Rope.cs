@@ -24,7 +24,6 @@ public class Rope : MonoBehaviour {
 			GameObject link = Instantiate(linkPrefab, transform);
 			HingeJoint2D joint = link.GetComponent<HingeJoint2D>();
 			joint.connectedBody = previousRB;
-
 			if (i==0)
 			{
 				joint.connectedAnchor = Vector2.zero;
