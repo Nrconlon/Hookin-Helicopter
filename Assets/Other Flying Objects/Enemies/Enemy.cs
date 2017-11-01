@@ -7,8 +7,11 @@ public class Enemy : HookableObject {
 
 	public override void Initialize()
 	{
-		playerHelicopter = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHelicopter>();
 		base.Initialize();
+		GameObject go = GameObject.FindGameObjectWithTag ("Player");
+		playerHelicopter = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHelicopter>();
+		Debug.Log (go.ToString ());
+
 	}
 	// Use this for initialization
 	void Start () {
@@ -20,7 +23,7 @@ public class Enemy : HookableObject {
 	}
 
 
-	public override void GotHooked(Rigidbody2D hook)
+	public override void GotHooked(Hook hook)
 	{
 		DeActivate();
 		base.GotHooked(hook);

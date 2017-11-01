@@ -10,6 +10,8 @@ public abstract class HookableObject : MonoBehaviour {
 	protected bool isHooked = false;
 	protected Rigidbody2D myRigidBody;
 	HingeJoint2D myHingeJoint;
+	DistanceJoint2D myDistanceJoint;
+
 	SpriteRenderer mySpriteRenderer;
 	protected bool isActivated = true;
 	[SerializeField] Sprite activeSprite;
@@ -20,23 +22,40 @@ public abstract class HookableObject : MonoBehaviour {
 		myRigidBody = GetComponent<Rigidbody2D>();
 		myHingeJoint = GetComponent<HingeJoint2D>();
 		mySpriteRenderer = GetComponent<SpriteRenderer>();
+		myDistanceJoint = GetComponent<DistanceJoint2D> ();
 		isHooked = false;
 
 		//UnHooked();
 	}
 
-	public virtual void GotHooked(Rigidbody2D hook)
+	public virtual void GotHooked(Hook hook)
 	{
+		Rigidbody2D hookRB = hook.GetComponent<Rigidbody2D> ();
+
 		myHingeJoint.enabled = true;
-		myHingeJoint.connectedBody = hook;
+		myHingeJoint.connectedBody = hookRB;
+		myHingeJoint.autoConfigureConnectedAnchor = true;
+		myHingeJoint.anchor = hook.transform.position - this.transform.position;
+		myHingeJoint.autoConfigureConnectedAnchor = false;
+
+		myDistanceJoint.enabled = true;
+		myDistanceJoint.connectedBody = hook.GetRope().helicopterRB;
+		myDistanceJoint.connectedAnchor = hook.GetRope().helicopterRopeAnchorPoint.localPosition;	//.anchor is where the anchor is on the link, connectedAnchor is where the anchor is on the helicopter RELATIVE TO THE HELICOPTER
+		myDistanceJoint.autoConfigureDistance = false;
+		myDistanceJoint.distance = hook.GetRope().ropeLength + (hook.transform.position - this.transform.position).magnitude;
+		myDistanceJoint.maxDistanceOnly = true;
+
 		isHooked = true;
-		transform.position = hook.transform.position;
+	
 	}
 
 	public virtual void UnHooked()
 	{
 		myHingeJoint.connectedBody = null;
 		myHingeJoint.enabled = false;
+
+		myDistanceJoint.connectedBody = null;
+		myDistanceJoint.enabled = false;
 		isHooked = false;
 	}
 

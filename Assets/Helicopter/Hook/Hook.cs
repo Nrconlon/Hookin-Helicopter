@@ -2,9 +2,18 @@
 
 public class Hook : MonoBehaviour
 {
+	public Rope rope;
 	HookableObject hookedObject;
 	[SerializeField] float reHookDelay = 0.5f;
 	float reHookDelayTimer = 0f;
+
+	public void SetRope(Rope r) {
+		this.rope = r;
+	}
+
+	public Rope GetRope() {
+		return this.rope;
+	}
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
@@ -23,7 +32,6 @@ public class Hook : MonoBehaviour
 				flyingObject.DeActivate();
 				//TODO apply force to objects
 			}
-
 		}
 		else
 		{
@@ -31,7 +39,7 @@ public class Hook : MonoBehaviour
 			if (flyingObject && !flyingObject.IsHooked && reHookDelayTimer < Time.time && flyingObject.IsActivated)
 			{
 				hookedObject = flyingObject;
-				flyingObject.GotHooked(GetComponent<Rigidbody2D>());
+				flyingObject.GotHooked(this);
 			}
 		}
 	}

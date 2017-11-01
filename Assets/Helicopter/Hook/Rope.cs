@@ -7,7 +7,7 @@ public class Rope : MonoBehaviour {
 	public GameObject hookPrefab;
 	public GameObject linkPrefab;
 
-	[SerializeField] float ropeLength = 2.1f;
+	public float ropeLength = 2.1f;
 
 	[SerializeField] int numLinks = 7;
 	[SerializeField] float linkMass = 100;
@@ -29,7 +29,9 @@ public class Rope : MonoBehaviour {
 			prevRB = AppendObjectToRope(linkPrefab, prevRB, i, linkDist, isFirstLink);
 		}
 		//last link is hook
-		AppendObjectToRope(hookPrefab, prevRB, numLinks, linkDist, false);
+		prevRB = AppendObjectToRope(hookPrefab, prevRB, numLinks, linkDist, false);
+		hook = prevRB.gameObject.GetComponent<Hook> ();
+		hook.SetRope (this);
 	}
 
 	Rigidbody2D AppendObjectToRope(GameObject objPrefab, Rigidbody2D prevLinkRB, int linkNum, float linkDist, bool isFirstLink) {
