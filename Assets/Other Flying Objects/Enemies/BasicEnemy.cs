@@ -7,21 +7,18 @@ public class BasicEnemy : Enemy {
 	Vector2 targetDirection = Vector2.zero;
 	// Use this for initialization
 	void Start () {
+	}
+
+	public override void Initialize()
+	{
 		base.Initialize();
 	}
 
-	private void FixedUpdate()
-	{
-		if(targetDirection != Vector2.zero && !isHooked && isActivated)
-		{
-			transform.position = transform.position + V2toV3(targetDirection * movementSpeed * 0.02f);
-		}
-	}
-
-
 	// Update is called once per frame
-	void Update () {  
-		if(!isHooked)
+	void Update () {
+
+
+		if (!isHooked)
 		{
 			//make sure this works
 			Vector2 playerPosition = playerHelicopter.transform.position;
@@ -31,6 +28,11 @@ public class BasicEnemy : Enemy {
 		else
 		{
 			targetDirection = Vector2.zero;
+		}
+
+		if (targetDirection != Vector2.zero && !isHooked && isActivated)
+		{
+			transform.position = transform.position + V2toV3(targetDirection * movementSpeed * Time.deltaTime);
 		}
 	}
 }
