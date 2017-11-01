@@ -15,7 +15,6 @@ public class PlayerHelicopterController : MonoBehaviour {
 		{
 
 			Vector3 target = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
-			Vector3 targetDirection = (target - myHelicopter.transform.position).normalized * myHelicopter.speed * Time.deltaTime;
 			myHelicopter.transform.Translate(Vector3.MoveTowards(myHelicopter.transform.position, target, myHelicopter.speed * Time.deltaTime) - myHelicopter.transform.position);
 
 		}
