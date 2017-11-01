@@ -11,6 +11,12 @@ public class MissileEnemy : Enemy {
 	BoxCollider2D myCollider;
 	Missile myMissile;
 
+	float missilePrepareTime = 2f;
+	float missileFireTimer = 0f;
+	float timeBetweenShots = 5f;
+
+	float missileDownPrepareSpeed = 1f;
+
 	Plane[] planes;
 	// Use this for initialization
 	void Start () {
@@ -19,42 +25,65 @@ public class MissileEnemy : Enemy {
 		myCollider = GetComponent<BoxCollider2D>();
 	}
 
-	private void FixedUpdate()
-	{
-		if(targetDirection != Vector2.zero && !isHooked && isActivated)
+
+	// Update is called once per frame
+	void Update () {
+
+		if (targetDirection != Vector2.zero && !isHooked && isActivated)
 		{
-			transform.position = transform.position + V2toV3(targetDirection * movementSpeed * 0.02f);
+			transform.position = transform.position + (Vector3) (targetDirection * movementSpeed * Time.deltaTime);
+		}
+
+		if (launchingMissile)
+		{
+			myMissile.transform.position = myMissile.transform.position + Vector3.down * missileDownPrepareSpeed * Time.deltaTime;
 		}
 
 
-	}
-
-
-	// Update is called once per frame
-	void Update () {  
-		if(!isHooked)
+		if (!isHooked)
 		{
 			float distanceToPlayer = (playerHelicopter.transform.position - transform.position).magnitude;
-			if (GeometryUtility.TestPlanesAABB(planes, myCollider.bounds) && distanceToPlayer <= distanceBeforeShooting)
+			if (!GeometryUtility.TestPlanesAABB(planes, myCollider.bounds))
 			{
-				SpawnMissile();
+				targetDirection = (Vector3.zero - transform.position).normalized;
+			}
+			else if (distanceToPlayer <= distanceBeforeShooting)
+			{
+				if (missileFireTimer < Time.time)
+				{
+					SpawnMissile();
+				}
 				targetDirection = Vector2.zero;
 			}
 			else
 			{
-				targetDirection = (Vector3.zero - transform.position).normalized;
+				targetDirection = (playerHelicopter.transform.position - transform.position).normalized;
 			}
 		}
-		else
-		{
-			targetDirection = Vector2.zero;
-		}
+
 	}
 
 	void SpawnMissile()
 	{
+		missileFireTimer = Time.time + timeBetweenShots;
+		print(transform.position);
 		GameObject missile = Instantiate(missilePrefab, transform);
+		missile.transform.parent = null;
+		myMissile = missile.GetComponent<Missile>();
+		myMissile.Initialize();
+		myMissile.DeActivate();
+		launchingMissile = true;
+		StartCoroutine(ActivateMissile());
 
+	}
+
+
+	IEnumerator ActivateMissile()
+	{
+		yield return new WaitForSeconds(missilePrepareTime);
+		launchingMissile = false;
+		myMissile.flyDirection = (playerHelicopter.transform.position - myMissile.transform.position).normalized;
+		myMissile.Activate();
 	}
 
 

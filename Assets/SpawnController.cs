@@ -89,7 +89,10 @@ public class SpawnController : MonoBehaviour {
 
 	void Spawn(GameObject spawnPrefab, int spawnIndex)
 	{
-		Instantiate(spawnPrefab, spawnLocations[spawnIndex]);
+		GameObject spawnedObject = Instantiate(spawnPrefab, spawnLocations[spawnIndex]);
+		HookableObject hookableObject = spawnedObject.GetComponent<HookableObject>();
+		hookableObject.transform.parent = null;
+		hookableObject.Initialize();
 	}
 
 
