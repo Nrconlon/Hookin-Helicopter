@@ -8,9 +8,7 @@ public class Enemy : HookableObject {
 	public override void Initialize()
 	{
 		base.Initialize();
-		GameObject go = GameObject.FindGameObjectWithTag ("Player");
 		playerHelicopter = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHelicopter>();
-		Debug.Log (go.ToString ());
 
 	}
 	// Use this for initialization

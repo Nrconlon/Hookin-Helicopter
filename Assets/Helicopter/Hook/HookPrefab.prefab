@@ -39,7 +39,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1640616325129290}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.5972054, y: -1.2667457, z: 0}
+  m_LocalPosition: {x: -4.372483, y: 0.11474753, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -55,10 +55,10 @@ Rigidbody2D:
   m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1000
-  m_LinearDrag: 0.1
-  m_AngularDrag: 0.1
+  m_UseAutoMass: 1
+  m_Mass: 10
+  m_LinearDrag: 0
+  m_AngularDrag: 0
   m_GravityScale: 1
   m_Material: {fileID: 0}
   m_Interpolate: 0
@@ -88,7 +88,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.39, y: 1.32}
+  m_Size: {x: 0.4, y: 0.4}
   m_EdgeRadius: 0
 --- !u!114 &114006701675721582
 MonoBehaviour:
@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e0349f62a84bb446a4b3f516a3ac80a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceFromChainEnd: 0.6
+  rope: {fileID: 0}
   reHookDelay: 0.5
 --- !u!212 &212826353062998558
 SpriteRenderer:
@@ -136,7 +136,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: cd0299e0ded7e2542b6f2f74fc6709a2, type: 3}
-  m_Color: {r: 0.21323532, g: 1, b: 0.544219, a: 1}
+  m_Color: {r: 0.046550598, g: 0.9044118, b: 0.052466832, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -162,7 +162,7 @@ DistanceJoint2D:
   m_ConnectedAnchor: {x: 0, y: 0}
   m_AutoConfigureDistance: 0
   m_Distance: 1
-  m_MaxDistanceOnly: 0
+  m_MaxDistanceOnly: 1
 --- !u!233 &233314720608235140
 HingeJoint2D:
   m_ObjectHideFlags: 1

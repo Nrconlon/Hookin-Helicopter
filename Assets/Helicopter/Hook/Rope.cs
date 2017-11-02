@@ -12,7 +12,7 @@ public class Rope : MonoBehaviour {
 	[SerializeField] int numLinks = 7;
 	[SerializeField] float linkMass = 100;
 
-	private Hook hook;
+	//private Hook hook;
 
 	void Start () {
 		GenerateRope();
@@ -30,8 +30,8 @@ public class Rope : MonoBehaviour {
 		}
 		//last link is hook
 		prevRB = AppendObjectToRope(hookPrefab, prevRB, numLinks, linkDist, false);
-		hook = prevRB.gameObject.GetComponent<Hook> ();
-		hook.SetRope (this);
+		//hook = prevRB.gameObject.GetComponent<Hook> ();
+		//hook.SetRope (this);  removed rope from hook
 	}
 
 	Rigidbody2D AppendObjectToRope(GameObject objPrefab, Rigidbody2D prevLinkRB, int linkNum, float linkDist, bool isFirstLink) {
@@ -45,9 +45,7 @@ public class Rope : MonoBehaviour {
 		dJoint.connectedBody = helicopterRB;
 		dJoint.connectedAnchor = helicopterRopeAnchorPoint.localPosition;	//.anchor is where the anchor is on the link, connectedAnchor is where the anchor is on the helicopter RELATIVE TO THE HELICOPTER
 		//.anchor should be configured on the link prefab itself.
-		dJoint.autoConfigureDistance = false;
 		dJoint.distance = (1+linkNum) * linkDist;
-		dJoint.maxDistanceOnly = true;
 
 		HingeJoint2D hJoint = link.GetComponent<HingeJoint2D> ();
 		hJoint.connectedBody = prevLinkRB;

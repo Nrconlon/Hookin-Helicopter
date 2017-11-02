@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class PlayerHelicopterController : MonoBehaviour {
 	PlayerHelicopter myHelicopter;
+	Rigidbody2D myRigidBody;
 	// Use this for initialization
 	void Start () {
 		myHelicopter = GetComponent<PlayerHelicopter>();
+		myRigidBody = GetComponent<Rigidbody2D>();
 	}
 	
 	// Update is called once per frame
@@ -21,14 +23,20 @@ public class PlayerHelicopterController : MonoBehaviour {
 
 			bool inRange = dir.magnitude <= myHelicopter.speed * Time.deltaTime;
 
-			if (inRange) {
-				myHelicopter.transform.position = new Vector3(target.x, target.y, myHelicopter.transform.position.z);
-			} else {
-				myHelicopter.transform.Translate (dir.normalized * myHelicopter.speed * Time.deltaTime);
+
+
+			Vector2 finalPos;
+
+			if (inRange)
+			{
+				finalPos = new Vector3(target.x, target.y, myHelicopter.transform.position.z);
+			}
+			else
+			{
+				finalPos = transform.position + (dir.normalized * myHelicopter.speed * Time.deltaTime);
 			}
 
-
-
+			myRigidBody.MovePosition(finalPos);
 		}
 	}
 }

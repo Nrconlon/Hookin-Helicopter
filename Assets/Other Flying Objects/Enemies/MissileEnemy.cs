@@ -4,18 +4,14 @@ using UnityEngine;
 
 public class MissileEnemy : Enemy {
 	float movementSpeed = 3f;
-	float distanceBeforeShooting = 4f;
 	[SerializeField] GameObject missilePrefab;
 	Vector2 targetDirection = Vector2.zero;
-	bool launchingMissile = false;
 	BoxCollider2D myCollider;
-	Missile myMissile;
+	float distanceBeforeShooting = 4f;
 
-	float missilePrepareTime = 2f;
 	float missileFireTimer = 0f;
 	float timeBetweenShots = 5f;
 
-	float missileDownPrepareSpeed = 1f;
 
 	Plane[] planes;
 	// Use this for initialization
@@ -34,10 +30,6 @@ public class MissileEnemy : Enemy {
 			transform.position = transform.position + (Vector3) (targetDirection * movementSpeed * Time.deltaTime);
 		}
 
-		if (launchingMissile)
-		{
-			myMissile.transform.position = myMissile.transform.position + Vector3.down * missileDownPrepareSpeed * Time.deltaTime;
-		}
 
 
 		if (!isHooked)
@@ -66,25 +58,11 @@ public class MissileEnemy : Enemy {
 	void SpawnMissile()
 	{
 		missileFireTimer = Time.time + timeBetweenShots;
-		print(transform.position);
 		GameObject missile = Instantiate(missilePrefab, transform);
 		missile.transform.parent = null;
-		myMissile = missile.GetComponent<Missile>();
+		Missile myMissile = missile.GetComponent<Missile>();
 		myMissile.Initialize();
-		myMissile.DeActivate();
-		launchingMissile = true;
-		StartCoroutine(ActivateMissile());
+		myMissile.TurnOnLaunching();
 
 	}
-
-
-	IEnumerator ActivateMissile()
-	{
-		yield return new WaitForSeconds(missilePrepareTime);
-		launchingMissile = false;
-		myMissile.flyDirection = (playerHelicopter.transform.position - myMissile.transform.position).normalized;
-		myMissile.Activate();
-	}
-
-
 }

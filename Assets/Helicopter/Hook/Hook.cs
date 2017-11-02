@@ -2,53 +2,71 @@
 
 public class Hook : MonoBehaviour
 {
-	public Rope rope;
 	HookableObject hookedObject;
+	PlayerHelicopter playerHelicopter;
 	[SerializeField] float reHookDelay = 0.5f;
+	[SerializeField] float defaultMass = 1f;
+	[SerializeField] float distanceFromHeliToDisconect = 1f;
 	float reHookDelayTimer = 0f;
 
-	public void SetRope(Rope r) {
-		this.rope = r;
+	private void Start()
+	{
+		playerHelicopter = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHelicopter>();
 	}
 
-	public Rope GetRope() {
-		return this.rope;
+	private void Update()
+	{
+		if(hookedObject)
+		{
+			float distance = Vector2.Distance(playerHelicopter.transform.position, transform.position);
+			if(distance < distanceFromHeliToDisconect)
+			{
+				DetatchHookedObject();
+			}
+		}
 	}
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		if(hookedObject)
+		if (hookedObject)
 		{
-			PlayerHelicopter helicopter = collision.gameObject.GetComponent<PlayerHelicopter>();
-			if (helicopter)
-			{
-				DetatchHookedObject();
-			}
-			HookableObject flyingObject = collision.gameObject.GetComponent<HookableObject>();
-			if (flyingObject && flyingObject != hookedObject)
+			HookableObject hookableObject = collision.gameObject.GetComponent<HookableObject>();
+			if (hookableObject && hookableObject != hookedObject)
 			{
 				//if force > needed force
-				DetatchHookedObject();
-				flyingObject.DeActivate();
+				Destroy(DetatchHookedObject().gameObject);
+				Destroy(hookableObject.gameObject);
 				//TODO apply force to objects
 			}
 		}
 		else
 		{
-			HookableObject flyingObject = collision.gameObject.GetComponent<HookableObject>();
-			if (flyingObject && !flyingObject.IsHooked && reHookDelayTimer < Time.time && flyingObject.IsActivated)
+			HookableObject hookableObject = collision.gameObject.GetComponent<HookableObject>();
+			if (hookableObject && !hookableObject.IsHooked && reHookDelayTimer < Time.time && hookableObject.IsActivated)
 			{
-				hookedObject = flyingObject;
-				flyingObject.GotHooked(this);
+				hookedObject = hookableObject;
+				hookableObject.GotHooked(this);
+				SetWeight(hookableObject.mass);
 			}
 		}
 	}
 
-	private void DetatchHookedObject()
+	private HookableObject DetatchHookedObject()
 	{
+		HookableObject lastHookedObjected = hookedObject;
 		reHookDelayTimer = Time.time + reHookDelay;
 		hookedObject.UnHooked();
 		hookedObject = null;
+		SetWeight(defaultMass);
+		return lastHookedObjected;
+	}
+
+	private void SetWeight(float mass)
+	{
+		Rigidbody2D myRigidBody = GetComponent<Rigidbody2D>();
+		//This seems to make it the most realistic
+		myRigidBody.drag = mass;
+		myRigidBody.gravityScale = mass;
 	}
 
 }

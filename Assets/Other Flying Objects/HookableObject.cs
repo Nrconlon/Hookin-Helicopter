@@ -9,24 +9,19 @@ using UnityEngine;
 public abstract class HookableObject : MonoBehaviour {
 	protected bool isHooked = false;
 	protected Rigidbody2D myRigidBody;
-	FixedJoint2D myFixedJoint;
-	DistanceJoint2D myDistanceJoint;
-	BoxCollider2D myBoxCollider;
+	HingeJoint2D myHingeJount;
 	SpriteRenderer mySpriteRenderer;
-
-	Hook myHook;
 
 	protected bool isActivated = true;
 	[SerializeField] Sprite activeSprite;
 	[SerializeField] Sprite unActiveSprite;
+	public float mass;
 
 	public virtual void Initialize()
 	{
 		myRigidBody = GetComponent<Rigidbody2D>();
-		myFixedJoint = GetComponent<FixedJoint2D>();
+		myHingeJount = GetComponent<HingeJoint2D>();
 		mySpriteRenderer = GetComponent<SpriteRenderer>();
-		myDistanceJoint = GetComponent<DistanceJoint2D> ();
-		myBoxCollider = GetComponent<BoxCollider2D> ();
 		isHooked = false;
 
 		//UnHooked();
@@ -34,47 +29,21 @@ public abstract class HookableObject : MonoBehaviour {
 
 	public virtual void GotHooked(Hook hook)
 	{
-		myHook = hook;
 		isHooked = true;
 
-		Rigidbody2D hookRB = hook.GetComponent<Rigidbody2D> ();
+		Rigidbody2D hookRigidBody = hook.GetComponent<Rigidbody2D> ();
 
-		myFixedJoint.enabled = true;
-		myFixedJoint.connectedBody = hookRB;
-		myFixedJoint.autoConfigureConnectedAnchor = false;
+		myHingeJount.enabled = true;
+		myHingeJount.connectedBody = hookRigidBody;
 
-		//DIRTY HACKS, DIRTY HACKS Because the positions are set to the same, you can say that the anchor and connector anchor ae both at (0, 0)
-		this.transform.position = hook.gameObject.transform.position;
-		myFixedJoint.autoConfigureConnectedAnchor = false;
-		myFixedJoint.anchor = Vector2.zero;
-		myFixedJoint.connectedAnchor = Vector2.zero;
-
-
-		myDistanceJoint.enabled = true;
-		myDistanceJoint.connectedBody = hook.GetRope().helicopterRB;
-		myDistanceJoint.connectedAnchor = hook.GetRope().helicopterRopeAnchorPoint.localPosition;	//.anchor is where the anchor is on the link, connectedAnchor is where the anchor is on the helicopter RELATIVE TO THE HELICOPTER
-		myDistanceJoint.autoConfigureDistance = false;
-		myDistanceJoint.distance = hook.GetRope().ropeLength;	//BECAUSE THE POSITIONS OF THE HOOK ARE THE SAME. DIRTY HACKS DIRTY HACKS
-		myDistanceJoint.maxDistanceOnly = true;
-
-
-		//myRigidBody.bodyType = RigidbodyType2D.Kinematic;
-
-		//hookRB.mass += this.myRigidBody.mass;
+		transform.position = hook.transform.position;
 
 	}
 
 	public virtual void UnHooked()
 	{
-		myFixedJoint.connectedBody = null;
-		myFixedJoint.enabled = false;
-
-		myDistanceJoint.connectedBody = null;
-		myDistanceJoint.enabled = false;
-
-		myHook.gameObject.GetComponent<Rigidbody2D>().mass -= this.myRigidBody.mass;
-
-		myHook = null;
+		myHingeJount.connectedBody = null;
+		myHingeJount.enabled = false;
 		isHooked = false;
 	}
 
@@ -94,11 +63,11 @@ public abstract class HookableObject : MonoBehaviour {
 	{
 		isActivated = false;
 		mySpriteRenderer.sprite = unActiveSprite;
-		myRigidBody.gravityScale = 1;
 	}
 	public bool IsActivated
 	{
 		get { return isActivated; }
 	}
+
 
 }
