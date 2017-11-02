@@ -17,6 +17,9 @@ public abstract class HookableObject : MonoBehaviour {
 	[SerializeField] Sprite unActiveSprite;
 	public float mass;
 
+	Hook myHook = null;
+	protected bool collidable = false;
+
 	public virtual void Initialize()
 	{
 		myRigidBody = GetComponent<Rigidbody2D>();
@@ -24,12 +27,13 @@ public abstract class HookableObject : MonoBehaviour {
 		mySpriteRenderer = GetComponent<SpriteRenderer>();
 		isHooked = false;
 
-		//UnHooked();
 	}
 
 	public virtual void GotHooked(Hook hook)
 	{
 		isHooked = true;
+		collidable = true;
+		myHook = hook;
 
 		Rigidbody2D hookRigidBody = hook.GetComponent<Rigidbody2D> ();
 
@@ -38,6 +42,7 @@ public abstract class HookableObject : MonoBehaviour {
 
 		transform.position = hook.transform.position;
 
+
 	}
 
 	public virtual void UnHooked()
@@ -45,6 +50,7 @@ public abstract class HookableObject : MonoBehaviour {
 		myHingeJount.connectedBody = null;
 		myHingeJount.enabled = false;
 		isHooked = false;
+		myHook = null;
 	}
 
 	public Vector3 V2toV3(Vector2 v2)
@@ -70,4 +76,24 @@ public abstract class HookableObject : MonoBehaviour {
 	}
 
 
-}
+	private void OnTriggerEnter2D(Collider2D collision)
+	{
+		if (collidable)
+		{
+			HookableObject hookableObject = collision.gameObject.GetComponent<HookableObject>();
+			if (hookableObject)
+			{
+				if(myHook)
+				{
+					myHook.DetatchHookedObject();
+				}
+				//if force > needed force
+				Destroy(hookableObject.gameObject);
+				Destroy(gameObject);
+				//TODO apply force to objects
+			}
+		}
+	}
+
+
+		}

@@ -32,7 +32,7 @@ public class MissileEnemy : Enemy {
 
 
 
-		if (!isHooked)
+		if (isActivated)
 		{
 			float distanceToPlayer = (playerHelicopter.transform.position - transform.position).magnitude;
 			if (!GeometryUtility.TestPlanesAABB(planes, myCollider.bounds))
@@ -41,6 +41,7 @@ public class MissileEnemy : Enemy {
 			}
 			else if (distanceToPlayer <= distanceBeforeShooting)
 			{
+
 				if (missileFireTimer < Time.time)
 				{
 					SpawnMissile();

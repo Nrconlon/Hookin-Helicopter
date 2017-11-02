@@ -9,9 +9,11 @@ public class Hook : MonoBehaviour
 	[SerializeField] float distanceFromHeliToDisconect = 1f;
 	float reHookDelayTimer = 0f;
 
+
 	private void Start()
 	{
 		playerHelicopter = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerHelicopter>();
+
 	}
 
 	private void Update()
@@ -28,35 +30,29 @@ public class Hook : MonoBehaviour
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		if (hookedObject)
-		{
-			HookableObject hookableObject = collision.gameObject.GetComponent<HookableObject>();
-			if (hookableObject && hookableObject != hookedObject)
-			{
-				//if force > needed force
-				Destroy(DetatchHookedObject().gameObject);
-				Destroy(hookableObject.gameObject);
-				//TODO apply force to objects
-			}
-		}
-		else
+		if (!hookedObject)
 		{
 			HookableObject hookableObject = collision.gameObject.GetComponent<HookableObject>();
 			if (hookableObject && !hookableObject.IsHooked && reHookDelayTimer < Time.time && hookableObject.IsActivated)
 			{
-				hookedObject = hookableObject;
-				hookableObject.GotHooked(this);
-				SetWeight(hookableObject.mass);
+				AttatchHookedObject(hookableObject);
 			}
 		}
 	}
+	private void AttatchHookedObject(HookableObject hookableObject)
+	{
+		hookedObject = hookableObject;
+		hookableObject.GotHooked(this);
+		SetWeight(hookableObject.mass);
+	}
 
-	private HookableObject DetatchHookedObject()
+	public HookableObject DetatchHookedObject()
 	{
 		HookableObject lastHookedObjected = hookedObject;
 		reHookDelayTimer = Time.time + reHookDelay;
 		hookedObject.UnHooked();
 		hookedObject = null;
+
 		SetWeight(defaultMass);
 		return lastHookedObjected;
 	}
